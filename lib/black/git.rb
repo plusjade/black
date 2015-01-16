@@ -36,7 +36,7 @@ module Black
           index = commits_dict.key(index_or_sha)
           sha = index_or_sha
         end
-        sha_prev = commits_dict[index-1]
+        sha_previous = commits_dict[index-1]
         output = diff_output(sha)
 
         commands = %w(diff-tree --no-commit-id --name-status -r)
@@ -52,7 +52,7 @@ module Black
             status = status.chomp
             filename = filename.chomp
 
-            Black::Git::Diff.new(@path, sha, sha_prev, output[i], filename, status)
+            Black::Git::Diff.new(@path, sha, sha_previous, output[i], filename, status)
           end
       end
 
@@ -123,7 +123,7 @@ module Black
       end
 
       def older
-        @older ||= Black::Git.execute(@path, "show", "#{ @sha_prev }:#{ @filename }")
+        @older ||= Black::Git.execute(@path, "show", "#{ @sha_previous }:#{ @filename }")
       end
 
       def diff_parsed
