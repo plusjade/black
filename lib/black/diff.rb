@@ -64,7 +64,7 @@ module Black
 
           diff_enumerator.each do |line|
             type = identify_type(line)
-            next if type == 'file-header'
+            next if %w(file-header warning).include?(type)
 
             if type == "metadata"
               old_line_number = line.match(/\-[0-9]*/)[0].to_i.abs rescue 0
@@ -89,15 +89,17 @@ module Black
       end
 
       def self.identify_type(line)
-        if line.start_with?('---', '+++')
+        if line.start_with?('---', '+++', 'index', 'new')
           "file-header"
         elsif line[0] == "+"
           "addition"
         elsif line[0] == "-"
           "deletion"
-        elsif line.match(/^@@ -/)
+        elsif line.start_with?('@@ -')
           "metadata"
-        else
+        elsif line.start_with?("\\") #\ No newline at end of file
+          "warning"
+        elsif line.start_with?(' ')
           "unchanged"
         end
       end
