@@ -1,0 +1,22 @@
+<div class="diff-file">
+  <div class="diff-header">
+    <strong><%= diff.filename %></strong>
+  </div>
+  <div class="diff-content">
+    <table class="text-file">
+    <%  diff.each do |line| %>
+      <% next if line.type == 'metadata' %>
+      <tr class="line_holder <%= line.type %>">
+        <td class="old_line" data-lnum="<%= line.old_line_number %>"></td>
+        <td class="new_line" data-lnum="<%= line.new_line_number %>"></td>
+        <td class="line_content">
+        <% if line.changed? %>
+          <i class="state"></i>
+        <% end %>
+          <pre class="highlight"><code><%= highlight(line) %></code></pre>
+        </td>
+      </tr>
+    <% end %>
+    </table>
+  </div>
+</div>
